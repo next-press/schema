@@ -1,0 +1,48 @@
+{
+    "name": "auroro/schema",
+    "description": "Reflection-based JSON Schema generation and DTO hydration",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.3",
+        "auroro/result": "self.version"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3",
+        "pestphp/pest": "^4",
+        "pestphp/pest-plugin-type-coverage": "^4",
+        "phpstan/phpstan": "^2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Auroro\\Schema\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Auroro\\Schema\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "test:coverage": "XDEBUG_MODE=coverage pest --coverage --min=100",
+        "test:types": "pest --type-coverage --min=100",
+        "analyse": "phpstan analyse",
+        "cs": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        },
+        "split": {
+            "target": "next-press/schema"
+        }
+    },
+    "minimum-stability": "stable"
+}
