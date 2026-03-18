@@ -33,6 +33,10 @@ final class Dehydrator
             return $value->name;
         }
 
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format('c');
+        }
+
         if (is_object($value)) {
             return $this->dehydrate($value);
         }

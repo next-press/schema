@@ -134,6 +134,9 @@ final class Hydrator
         }
 
         if (is_a($typeName, \DateTimeInterface::class, true)) {
+            if ($value instanceof \DateTimeInterface) {
+                return $value;
+            }
             /** @var class-string<\DateTimeInterface> $typeName */
             return new $typeName($value);
         }
