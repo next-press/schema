@@ -42,10 +42,10 @@ final readonly class ReflectedType
     {
         $type = self::fromReflectionType($param->getType());
 
-        if ('array' === $type->name && null === $type->collectionValueType) {
+        if (null === $type->collectionValueType) {
             $itemType = self::parseParamDocType($param);
             if (null !== $itemType) {
-                return new self('array', true, $type->isNullable, $itemType, $type->unionTypes);
+                return new self($type->name, $type->isBuiltin, $type->isNullable, $itemType, $type->unionTypes);
             }
         }
 
@@ -144,8 +144,8 @@ final readonly class ReflectedType
             return self::resolveDocTypeName($m[1], $param->getDeclaringClass());
         }
 
-        // Match @param array<TypeName> $paramName or @param list<TypeName> $paramName
-        if (preg_match('/@param\s+(?:array|list)<(?:\w+,\s*)?(\S+?)>\s+\$' . $name . '/', $doc, $m)) {
+        // Match @param Type<TypeName> $paramName (array, list, Collection, etc.)
+        if (preg_match('/@param\s+\S+<(?:\w+,\s*)?(\S+?)>\s+\$' . $name . '/', $doc, $m)) {
             return self::resolveDocTypeName($m[1], $param->getDeclaringClass());
         }
 

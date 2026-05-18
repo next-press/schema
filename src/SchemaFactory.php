@@ -120,6 +120,11 @@ final class SchemaFactory
             return ['anyOf' => $variants];
         }
 
+        // Collection-like objects with generic type (e.g. Collection<Task>)
+        if (null !== $unwrapped->collectionValueType && 'array' !== $unwrapped->name) {
+            return $this->buildArraySchema($unwrapped);
+        }
+
         return match ($unwrapped->name) {
             'int' => ['type' => 'integer'],
             'float' => ['type' => 'number'],

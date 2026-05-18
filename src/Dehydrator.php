@@ -37,6 +37,13 @@ final class Dehydrator
             return $value->format('c');
         }
 
+        if ($value instanceof \Traversable) {
+            return array_map(
+                $this->dehydrateValue(...),
+                iterator_to_array($value),
+            );
+        }
+
         if (is_object($value)) {
             return $this->dehydrate($value);
         }

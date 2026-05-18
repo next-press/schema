@@ -179,3 +179,41 @@ it('coerces array of builtin types as-is', function () {
 
     expect($result->numbers)->toBe([1, 2, 3]);
 });
+
+it('returns the same object when the input already is an instance of the target class', function () {
+    $existing = new ScalarDto(name: 'Alice', count: 5, rate: 3.14, verbose: true);
+
+    $result = $this->hydrator->hydrate($existing, ScalarDto::class);
+
+    expect($result)->toBe($existing); // same reference — no reflection
+});
+
+it('fills public properties when the target class has no constructor', function () {
+    $result = $this->hydrator->hydrate([
+        'count' => 42,
+        'label' => 'hello',
+    ], \Auroro\Schema\Tests\Fixtures\NoConstructorPublicPropsDto::class);
+
+    expect($result->count)->toBe(42);
+    expect($result->label)->toBe('hello');
+});
+
+it('coerces scalar types when filling public properties', function () {
+    $result = $this->hydrator->hydrate([
+        'count' => '42',      // string → int coercion
+        'label' => 99,        // int → string coercion
+    ], \Auroro\Schema\Tests\Fixtures\NoConstructorPublicPropsDto::class);
+
+    expect($result->count)->toBe(42);
+    expect($result->label)->toBe('99');
+});
+
+it('leaves public properties at their defaults when no data is provided', function () {
+    $result = $this->hydrator->hydrate(
+        [],
+        \Auroro\Schema\Tests\Fixtures\NoConstructorPublicPropsDto::class,
+    );
+
+    expect($result->count)->toBe(0);
+    expect($result->label)->toBe('');
+});
